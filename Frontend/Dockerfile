@@ -4,14 +4,14 @@ FROM node:18-alpine
 # Set working directory inside the container
 WORKDIR /app
 
-# Copy package.json and package-lock.json (or yarn.lock) first to leverage Docker cache
-COPY package*.json ./
+# Copy package.json and package-lock.json from Frontend directory first to leverage Docker cache
+COPY Frontend/package*.json ./
 
 # Install dependencies
 RUN npm install
 
-# Copy the rest of the application code
-COPY . .
+# Copy the rest of the Frontend application code
+COPY Frontend/ ./
 
 # Build the React app for production
 RUN npm run build
