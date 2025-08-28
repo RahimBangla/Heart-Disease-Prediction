@@ -2,19 +2,17 @@ name: Backend and Frontend Docker Image CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
-
   build-docker-images:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Build the backend Docker image
-      run: docker build ./backend --file ./backend/Dockerfile --tag backend-image:$(date +%s)
-    - name: Build the frontend Docker image
-      run: docker build ./frontend --file ./frontend/Dockerfile --tag frontend-image:$(date +%s)
+      - uses: actions/checkout@v4
+      - name: Build the backend Docker image
+        run: docker build ./Backend --file ./Backend/Dockerfile --tag backend-image:$(date +%s)
+      - name: Build the frontend Docker image
+        run: docker build ./Frontend --file ./Frontend/Dockerfile --tag frontend-image:$(date +%s)
