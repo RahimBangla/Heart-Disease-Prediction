@@ -20,6 +20,7 @@ env:
 
 jobs:
   backend-build-and-push-image:
+    if: ${{ contains(github.event.head_commit.modified, 'Backend/') || contains(github.event.head_commit.added, 'Backend/') || contains(github.event.head_commit.removed, 'Backend/') }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -52,6 +53,7 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
 
   frontend-build-and-push-image:
+    if: ${{ contains(github.event.head_commit.modified, 'Frontend/') || contains(github.event.head_commit.added, 'Frontend/') || contains(github.event.head_commit.removed, 'Frontend/') }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -90,6 +92,13 @@ jobs:
 
     runs-on: ubuntu-latest
     steps:
+      - name: Ensure docker-compose.yml exists
+        run: |
+          if [ ! -f docker-compose.yml ]; then
+            echo "docker-compose.yml not found!"
+            exit 1
+          fi
+
       - name: Copy docker-compose.yml to remote server
         uses: appleboy/scp-action@master
         with:
@@ -97,7 +106,7 @@ jobs:
           username: ${{ secrets.USER }}
           password: ${{ secrets.SSH_PASSWORD }}
           port: ${{ secrets.PORT }}
-          source: "docker-compose.yml"
+          source: "./docker-compose.yml"
           target: "/"
 
       - name: Update Docker image in deployment
@@ -108,6 +117,7 @@ jobs:
           password: ${{ secrets.SSH_PASSWORD }}
           port: ${{ secrets.PORT }}
           script: |
+            set -e
             whoami
             echo "whoami"
             docker ps -a
