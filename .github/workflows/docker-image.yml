@@ -90,6 +90,16 @@ jobs:
 
     runs-on: ubuntu-latest
     steps:
+      - name: Copy docker-compose.yml to remote server
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          port: ${{ secrets.PORT }}
+          source: "docker-compose.yml"
+          target: "/"
+
       - name: Update Docker image in deployment
         uses: appleboy/ssh-action@master
         with:
@@ -102,6 +112,12 @@ jobs:
             echo "whoami"
             docker ps -a
             ls -la
-            ./deploy.sh
+            echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ secrets.GITHUB_USERNAME }} --password-stdin
+            docker pull ghcr.io/rbsofttechnology/heart-disease-prediction-backend:main
+            docker pull ghcr.io/rbsofttechnology/heart-disease-prediction-frontend:main
+            docker-compose down
+            echo "Starting Docker containers using docker-compose..."
+            docker-compose up -d
+            echo "Heart Disease Prediction containers have been started successfully."
             docker ps -a
             ls -la
