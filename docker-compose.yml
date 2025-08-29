@@ -2,11 +2,8 @@ version: "3.8"
 
 services:
   backend:
-    image: ghcr.io/rbsofttechnology/heart-disease-prediction-backend:main
+    image: ghcr.io/rahimbangla/heart-disease-prediction-backend:main
     container_name: heart-disease-backend
-    build:
-      context: .
-      dockerfile: ./Backend/Dockerfile
     ports:
       - "8000:8000"
     environment:
@@ -14,11 +11,8 @@ services:
     restart: unless-stopped
 
   frontend:
-    image: ghcr.io/rbsofttechnology/heart-disease-prediction-frontend:main
+    image: ghcr.io/rahimbangla/heart-disease-prediction-frontend:main
     container_name: heart-disease-frontend
-    build:
-      context: .
-      dockerfile: ./Frontend/Dockerfile
     ports:
       - "3000:80"
     environment:

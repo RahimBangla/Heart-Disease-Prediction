@@ -2,14 +2,14 @@
 
 # Login to the GitHub Container Registry
 echo "Logging in to GitHub Container Registry..."
-echo "<GITHUB_TOKEN>" | docker login ghcr.io -u <GITHUB_USERNAME> --password-stdin
+# echo "$GITHUB_TOKEN" | docker login ghcr.io -u $GITHUB_USERNAME --password-stdin
 
 # Pull Docker images for Heart Disease Prediction project
 echo "Pulling the backend image..."
-docker pull ghcr.io/rbsofttechnology/heart-disease-prediction-backend:main
+docker pull ghcr.io/rahimbangla/heart-disease-prediction-backend:main
 
 echo "Pulling the frontend image..."
-docker pull ghcr.io/rbsofttechnology/heart-disease-prediction-frontend:main
+docker pull ghcr.io/rahimbangla/heart-disease-prediction-frontend:main
 
 # Stop and remove existing containers
 docker-compose down

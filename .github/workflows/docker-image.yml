@@ -20,7 +20,6 @@ env:
 
 jobs:
   backend-build-and-push-image:
-    if: ${{ contains(github.event.head_commit.modified, 'Backend/') || contains(github.event.head_commit.added, 'Backend/') || contains(github.event.head_commit.removed, 'Backend/') }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -53,7 +52,6 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
 
   frontend-build-and-push-image:
-    if: ${{ contains(github.event.head_commit.modified, 'Frontend/') || contains(github.event.head_commit.added, 'Frontend/') || contains(github.event.head_commit.removed, 'Frontend/') }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -86,30 +84,30 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
 
   deploy:
-    # needs:
-    #   - backend-build-and-push-image
-    #   - frontend-build-and-push-image
+    needs:
+      - backend-build-and-push-image
+      - frontend-build-and-push-image
 
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Copy docker-compose.yml to remote server home directory
+      - name: Copy deployment files to remote server
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
           password: ${{ secrets.SSH_PASSWORD }}
           port: ${{ secrets.PORT }}
-          source: "docker-compose.yml"
+          source: "docker-compose.yml,deploy.sh"
           target: "~"
           strip_components: 0
           debug: true
           timeout: 60s
           overwrite: true
 
-      - name: Update Docker image in deployment
+      - name: Deploy application
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
@@ -119,15 +117,16 @@ jobs:
           script: |
             set -e
             whoami
-            echo "whoami"
+            echo "Current directory: $(pwd)"
+            echo "Files in home directory:"
+            ls -la ~/
+            echo "Making deploy.sh executable..."
+            chmod +x ~/deploy.sh
+            echo "Setting environment variables..."
+            export GITHUB_TOKEN="${{ secrets.GITHUB_TOKEN }}"
+            export GITHUB_USERNAME="${{ github.actor }}"
+            echo "Running deployment script..."
+            cd ~/ && ./deploy.sh
+            echo "Deployment completed successfully!"
+            echo "Current running containers:"
             docker ps -a
-            ls -la
-            docker pull ghcr.io/rahimbangla/heart-disease-prediction-backend:main
-            docker pull ghcr.io/rahimbangla/heart-disease-prediction-frontend:main
-            # Use the correct path for docker-compose.yml (in home directory)
-            docker-compose -f ~/docker-compose.yml down
-            echo "Starting Docker containers using docker-compose..."
-            docker-compose -f ~/docker-compose.yml up -d
-            echo "Heart Disease Prediction containers have been started successfully."
-            docker ps -a
-            ls -la
