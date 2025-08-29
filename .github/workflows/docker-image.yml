@@ -122,12 +122,14 @@ jobs:
             echo "whoami"
             docker ps -a
             ls -la
-            echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ secrets.GITHUB_USERNAME }} --password-stdin
+            # Use --password-stdin to avoid interactive login error
+            echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ secrets.GITHUB_USERNAME }}" --password-stdin
             docker pull ghcr.io/rbsofttechnology/heart-disease-prediction-backend:main
             docker pull ghcr.io/rbsofttechnology/heart-disease-prediction-frontend:main
-            docker-compose -f /docker-compose.yml down
+            # Use the correct path for docker-compose.yml (in home directory)
+            docker-compose -f ~/docker-compose.yml down
             echo "Starting Docker containers using docker-compose..."
-            docker-compose -f /docker-compose.yml up -d
+            docker-compose -f ~/docker-compose.yml up -d
             echo "Heart Disease Prediction containers have been started successfully."
             docker ps -a
             ls -la
