@@ -92,25 +92,15 @@ jobs:
 
     runs-on: ubuntu-latest
     steps:
-      - name: Check for docker-compose.yml in repo root
-        run: |
-          if [ ! -f ./docker-compose.yml ]; then
-            echo "docker-compose.yml not found in repository root folder!"
-            echo "Error: Process completed with exit code 1."
-            exit 1
-          else
-            echo "docker-compose.yml found in repository root folder."
-          fi
-
-      - name: Copy docker-compose.yml from repo root to remote server root folder
+      - name: Copy docker-compose.yml to remote server home directory
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
           password: ${{ secrets.SSH_PASSWORD }}
           port: ${{ secrets.PORT }}
-          source: "./docker-compose.yml"
-          target: "/"
+          source: "docker-compose.yml"
+          target: "~"
 
       - name: Update Docker image in deployment
         uses: appleboy/ssh-action@master
