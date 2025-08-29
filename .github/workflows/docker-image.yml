@@ -93,14 +93,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Copy docker-compose.yml to remote server home directory
-        uses: appleboy/scp-action@master
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USER }}
-          password: ${{ secrets.SSH_PASSWORD }}
-          port: ${{ secrets.PORT }}
-          source: "docker-compose.yml"
-          target: "~"
+        run: |
+          echo "Copying docker-compose.yml to remote server home directory..."
+          scp -P ${{ secrets.PORT }} docker-compose.yml ${{ secrets.USER }}@${{ secrets.HOST }}:~/
+        env:
+          SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
 
       - name: Update Docker image in deployment
         uses: appleboy/ssh-action@master
