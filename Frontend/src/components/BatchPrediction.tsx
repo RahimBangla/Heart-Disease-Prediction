@@ -1,7 +1,7 @@
-import React, { useState, useCallback } from 'react';
+import axios from 'axios';
+import React, { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { toast } from 'react-hot-toast';
-import axios from 'axios';
 import './BatchPrediction.css';
 
 interface BatchResult {
@@ -49,7 +49,7 @@ const BatchPrediction: React.FC = () => {
     formData.append('file', selectedFile);
 
     try {
-      const response = await axios.post('https://heart-disease-prediction-8-xuyq.onrender.com/api/predict/folder', formData, {
+      const response = await axios.post('https://api.ml.yfbd.org/api/predict/folder', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
       setResult(response.data);
@@ -64,7 +64,7 @@ const BatchPrediction: React.FC = () => {
 
   const handleDownload = (type: 'confusion_matrix' | 'roc_curve' | 'sample_predictions') => {
     if (result) {
-      const url = `https://heart-disease-prediction-8-xuyq.onrender.com/api/download/${type}`;
+      const url = `https://api.ml.yfbd.org/api/download/${type}`;
       const link = document.createElement('a');
       link.href = url;
       link.download = `${type}.png`;
@@ -75,13 +75,13 @@ const BatchPrediction: React.FC = () => {
   };
 
   const confMatrixUrl = result?.confusion_matrix_path
-    ? `https://heart-disease-prediction-8-xuyq.onrender.com/api/download/confusion_matrix`
+    ? `https://api.ml.yfbd.org/api/download/confusion_matrix`
     : '';
   const rocCurveUrl = result?.roc_curve_path
-    ? `https://heart-disease-prediction-8-xuyq.onrender.com/api/download/roc_curve`
+    ? `https://api.ml.yfbd.org/api/download/roc_curve`
     : '';
   const samplePredictionsUrl = result?.sample_predictions_path
-    ? `https://heart-disease-prediction-8-xuyq.onrender.com/api/download/sample_predictions`
+    ? `https://api.ml.yfbd.org/api/download/sample_predictions`
     : '';
 
   return (
@@ -157,37 +157,37 @@ const BatchPrediction: React.FC = () => {
                   <h3>Confusion Matrix</h3>
                   {confMatrixUrl && <img src={confMatrixUrl} alt="Confusion Matrix" />}
                   <button
-                  className="download-btn"
-                  onClick={() => handleDownload('confusion_matrix')}
-                  disabled={!result.confusion_matrix_path}
-                >
-                  <i className="fas fa-chart-bar"></i>
-                  Download Confusion Matrix
-                </button>
+                    className="download-btn"
+                    onClick={() => handleDownload('confusion_matrix')}
+                    disabled={!result.confusion_matrix_path}
+                  >
+                    <i className="fas fa-chart-bar"></i>
+                    Download Confusion Matrix
+                  </button>
                 </div>
                 <div className="result-item">
                   <h3>ROC Curve</h3>
                   {rocCurveUrl && <img src={rocCurveUrl} alt="ROC Curve" />}
                   <button
-                  className="download-btn"
-                  onClick={() => handleDownload('roc_curve')}
-                  disabled={!result.roc_curve_path}
-                >
-                  <i className="fas fa-chart-line"></i>
-                  Download ROC Curve
-                </button>
+                    className="download-btn"
+                    onClick={() => handleDownload('roc_curve')}
+                    disabled={!result.roc_curve_path}
+                  >
+                    <i className="fas fa-chart-line"></i>
+                    Download ROC Curve
+                  </button>
                 </div>
                 <div className="result-item full-width">
                   <h3>Sample Predictions</h3>
                   {samplePredictionsUrl && <img src={samplePredictionsUrl} alt="Sample Predictions" />}
                   <button
-                  className="download-btn"
-                  onClick={() => handleDownload('sample_predictions')}
-                  disabled={!result.sample_predictions_path}
-                >
-                  <i className="fas fa-images"></i>
-                  Download Sample Predictions
-                </button>
+                    className="download-btn"
+                    onClick={() => handleDownload('sample_predictions')}
+                    disabled={!result.sample_predictions_path}
+                  >
+                    <i className="fas fa-images"></i>
+                    Download Sample Predictions
+                  </button>
                 </div>
               </div>
             </div>

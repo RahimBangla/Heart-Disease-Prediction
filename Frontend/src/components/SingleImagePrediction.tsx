@@ -1,7 +1,7 @@
-import React, { useState, useCallback } from 'react';
+import axios from 'axios';
+import React, { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { toast } from 'react-hot-toast';
-import axios from 'axios';
 import './SingleImagePrediction.css';
 
 interface PredictionResult {
@@ -22,7 +22,7 @@ const SingleImagePrediction: React.FC = () => {
         toast.error('Please select an image file');
         return;
       }
-      
+
       setSelectedFile(file);
       const url = URL.createObjectURL(file);
       setPreviewUrl(url);
@@ -55,7 +55,7 @@ const SingleImagePrediction: React.FC = () => {
     formData.append('file', selectedFile);
 
     try {
-      const response = await axios.post(' https://heart-disease-prediction-8-xuyq.onrender.com/api/predict/single', formData, {
+      const response = await axios.post(' https://api.ml.yfbd.org/api/predict/single', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -76,10 +76,10 @@ const SingleImagePrediction: React.FC = () => {
       <div className="prediction-card">
         <h2>Single Image Analysis</h2>
         <p>Upload a chest X-ray image to detect heart disease</p>
-        
+
         {!previewUrl ? (
-          <div 
-            {...getRootProps()} 
+          <div
+            {...getRootProps()}
             className={`upload-area ${isDragActive ? 'dragover' : ''}`}
           >
             <input {...getInputProps()} />
@@ -98,8 +98,8 @@ const SingleImagePrediction: React.FC = () => {
           </div>
         )}
 
-        <button 
-          className="predict-btn" 
+        <button
+          className="predict-btn"
           onClick={handlePredict}
           disabled={!selectedFile || isLoading}
         >
@@ -123,7 +123,7 @@ const SingleImagePrediction: React.FC = () => {
               <div className="result-content">
                 <div className="prediction">
                   <span className="label">Prediction:</span>
-                  <span 
+                  <span
                     className={`value ${result.prediction === 'Cardiomegaly' ? 'positive' : 'negative'}`}
                   >
                     {result.prediction}

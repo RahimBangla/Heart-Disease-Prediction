@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import './Header.css';
 
 interface ModelStatus {
@@ -18,7 +18,7 @@ const Header: React.FC = () => {
   useEffect(() => {
     const checkModelStatus = async () => {
       try {
-        const response = await axios.get(' https://heart-disease-prediction-8-xuyq.onrender.com/api/model/status');
+        const response = await axios.get(' https://api.ml.yfbd.org/api/model/status');
         setModelStatus(response.data);
       } catch (error) {
         console.error('Failed to get model status:', error);
@@ -48,7 +48,7 @@ const Header: React.FC = () => {
           <h1>MedScan</h1>
         </div>
         <p className="tagline">AI-Powered Heart Disease Detection</p>
-        
+
         {/* Model Status Indicator */}
         <div className="model-status">
           {loading ? (
@@ -63,9 +63,9 @@ const Header: React.FC = () => {
                 {modelStatus.trained_model_loaded ? modelStatus.trained_model_loaded : 'Demo Mode'}
               </span>
               <div className="status-tooltip">
-                <strong>Model Status:</strong> {modelStatus.message}<br/>
-                <strong>Device:</strong> {modelStatus.device}<br/>
-                <strong>Type:</strong> {modelStatus.model_type}<br/>
+                <strong>Model Status:</strong> {modelStatus.message}<br />
+                <strong>Device:</strong> {modelStatus.device}<br />
+                <strong>Type:</strong> {modelStatus.model_type}<br />
                 {modelStatus.trained_model_loaded && (
                   <><strong>Size:</strong> {modelStatus.model_file_size}</>
                 )}
