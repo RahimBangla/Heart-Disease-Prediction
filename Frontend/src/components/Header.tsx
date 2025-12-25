@@ -41,42 +41,74 @@ const Header: React.FC = () => {
   return (
     <header className="header">
       <div className="header-content">
-        <div className="logo">
-          <div className="heartbeat-icon">
-            <i className="fas fa-heartbeat"></i>
+        {/* Logo Section */}
+        <div className="header-logo">
+          <div className="logo-icon">
+            <i className="fas fa-x-ray"></i>
           </div>
-          <h1>MedScan</h1>
+          <div className="logo-text">
+            <h1>Xray Image Prediction</h1>
+            <span className="tagline">Data Mining Project</span>
+          </div>
         </div>
-        <p className="tagline">AI-Powered Heart Disease Detection</p>
 
-        {/* Model Status Indicator */}
-        <div className="model-status">
-          {loading ? (
-            <div className="status-indicator loading">
-              <i className="fas fa-spinner fa-spin"></i>
-              <span>Checking Model...</span>
-            </div>
-          ) : modelStatus ? (
-            <div className={`status-indicator ${modelStatus.trained_model_loaded ? 'ready' : 'demo'}`}>
-              <i className={`fas ${modelStatus.trained_model_loaded ? 'fa-check-circle' : 'fa-info-circle'}`}></i>
-              <span>
-                {modelStatus.trained_model_loaded ? modelStatus.trained_model_loaded : 'Demo Mode'}
-              </span>
-              <div className="status-tooltip">
-                <strong>Model Status:</strong> {modelStatus.message}<br />
-                <strong>Device:</strong> {modelStatus.device}<br />
-                <strong>Type:</strong> {modelStatus.model_type}<br />
-                {modelStatus.trained_model_loaded && (
-                  <><strong>Size:</strong> {modelStatus.model_file_size}</>
-                )}
+        {/* Center Info Section */}
+        <div className="header-center">
+          <div className="project-meta">
+            <div className="meta-item">
+              <i className="fas fa-user-graduate"></i>
+              <div className="meta-content">
+                <span className="meta-label">Students</span>
+                <span className="meta-value">Md. Abdur Rahim Sarkar (221902011)</span>
+                <span className="meta-value">Ramjan Ali (221902227)</span>
               </div>
             </div>
-          ) : (
-            <div className="status-indicator error">
-              <i className="fas fa-exclamation-triangle"></i>
-              <span>Model Error</span>
+            <div className="meta-item">
+              <i className="fas fa-chalkboard-teacher"></i>
+              <div className="meta-content">
+                <span className="meta-label">Supervised by</span>
+                <span className="meta-value">Md Atikuzzaman</span>
+                <span className="meta-sub">Lecturer, CSE Dept.</span>
+              </div>
             </div>
-          )}
+            <div className="meta-item">
+              <i className="fas fa-university"></i>
+              <div className="meta-content">
+                <span className="meta-label">Institution</span>
+                <span className="meta-value">Green University of Bangladesh</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Right Section - Model Status */}
+        <div className="header-right">
+          <div className="model-status">
+            {loading ? (
+              <div className="status-indicator loading">
+                <i className="fas fa-spinner fa-spin"></i>
+                <span>Loading...</span>
+              </div>
+            ) : modelStatus ? (
+              <div className={`status-indicator ${modelStatus.trained_model_loaded ? 'ready' : 'demo'}`}>
+                <i className={`fas ${modelStatus.trained_model_loaded ? 'fa-check-circle' : 'fa-info-circle'}`}></i>
+                <span>{modelStatus.trained_model_loaded ? 'Ready' : 'Demo'}</span>
+                <div className="status-tooltip">
+                  <strong>Model Status:</strong> {modelStatus.message}<br />
+                  <strong>Device:</strong> {modelStatus.device}<br />
+                  <strong>Type:</strong> {modelStatus.model_type}<br />
+                  {modelStatus.trained_model_loaded && (
+                    <><strong>Size:</strong> {modelStatus.model_file_size}</>
+                  )}
+                </div>
+              </div>
+            ) : (
+              <div className="status-indicator error">
+                <i className="fas fa-exclamation-triangle"></i>
+                <span>Error</span>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </header>

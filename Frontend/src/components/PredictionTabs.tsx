@@ -14,26 +14,40 @@ const PredictionTabs: React.FC = () => {
 
   return (
     <div className="prediction-tabs">
-      <div className="nav-tabs">
-        <button 
-          className={`tab-btn ${activeTab === 'single' ? 'active' : ''}`}
-          onClick={() => handleTabChange('single')}
-        >
-          <i className="fas fa-image"></i>
-          Single Image
-        </button>
-        <button 
-          className={`tab-btn ${activeTab === 'batch' ? 'active' : ''}`}
-          onClick={() => handleTabChange('batch')}
-        >
-          <i className="fas fa-folder"></i>
-          Batch Upload
-        </button>
-      </div>
+      <aside className="sidebar-nav">
+        <nav className="nav-menu">
+          <button 
+            className={`nav-item ${activeTab === 'single' ? 'active' : ''}`}
+            onClick={() => handleTabChange('single')}
+          >
+            <div className="nav-icon">
+              <i className="fas fa-image"></i>
+            </div>
+            <div className="nav-content">
+              <span className="nav-title">Single Image</span>
+              <span className="nav-desc">Analyze individual X-rays</span>
+            </div>
+          </button>
+          <button 
+            className={`nav-item ${activeTab === 'batch' ? 'active' : ''}`}
+            onClick={() => handleTabChange('batch')}
+          >
+            <div className="nav-icon">
+              <i className="fas fa-folder"></i>
+            </div>
+            <div className="nav-content">
+              <span className="nav-title">Batch Analysis</span>
+              <span className="nav-desc">Process multiple images</span>
+            </div>
+          </button>
+        </nav>
+      </aside>
 
-      <div className="tab-content">
-        {activeTab === 'single' && <SingleImagePrediction />}
-        {activeTab === 'batch' && <BatchPrediction />}
+      <div className="tab-content-wrapper">
+        <div className="tab-content">
+          {activeTab === 'single' && <SingleImagePrediction />}
+          {activeTab === 'batch' && <BatchPrediction />}
+        </div>
       </div>
     </div>
   );

@@ -12,28 +12,32 @@ function App() {
         toastOptions={{
           duration: 4000,
           style: {
-            background: '#363636',
+            background: 'rgba(15, 23, 42, 0.95)',
             color: '#fff',
+            border: '1px solid rgba(148, 163, 184, 0.2)',
+            backdropFilter: 'blur(20px)',
           },
           success: {
             duration: 3000,
             iconTheme: {
-              primary: '#27ae60',
+              primary: '#22c55e',
               secondary: '#fff',
             },
           },
           error: {
             duration: 4000,
             iconTheme: {
-              primary: '#e74c3c',
+              primary: '#ef4444',
               secondary: '#fff',
             },
           },
         }}
       />
-      <div className="container">
+      <div className="app-layout">
         <Header />
-        <PredictionTabs />
+        <main className="main-content">
+          <PredictionTabs />
+        </main>
       </div>
     </div>
   );

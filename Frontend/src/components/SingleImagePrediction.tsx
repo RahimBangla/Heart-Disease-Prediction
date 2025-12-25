@@ -73,56 +73,68 @@ const SingleImagePrediction: React.FC = () => {
 
   return (
     <div className="single-image-prediction">
-      <div className="prediction-card">
-        <h2>Single Image Analysis</h2>
-        <p>Upload a chest X-ray image to detect heart disease</p>
+      <div className="prediction-layout">
+        <div className="upload-section">
+          <div className="section-header">
+            <h2>Single Image Analysis</h2>
+            <p>Upload a chest X-ray image to detect heart disease</p>
+          </div>
 
-        {!previewUrl ? (
-          <div
-            {...getRootProps()}
-            className={`upload-area ${isDragActive ? 'dragover' : ''}`}
-          >
-            <input {...getInputProps()} />
-            <div className="upload-content">
-              <i className="fas fa-cloud-upload-alt"></i>
-              <h3>Drop your image here</h3>
-              <p>or click to browse</p>
+          {!previewUrl ? (
+            <div
+              {...getRootProps()}
+              className={`upload-area ${isDragActive ? 'dragover' : ''}`}
+            >
+              <input {...getInputProps()} />
+              <div className="upload-content">
+                <i className="fas fa-cloud-upload-alt"></i>
+                <h3>Drop your image here</h3>
+                <p>or click to browse</p>
+              </div>
             </div>
-          </div>
-        ) : (
-          <div className="preview-area">
-            <img src={previewUrl} alt="Preview" />
-            <button className="remove-btn" onClick={handleRemoveImage}>
-              <i className="fas fa-times"></i>
-            </button>
-          </div>
-        )}
-
-        <button
-          className="predict-btn"
-          onClick={handlePredict}
-          disabled={!selectedFile || isLoading}
-        >
-          {isLoading ? (
-            <>
-              <div className="spinner"></div>
-              Analyzing...
-            </>
           ) : (
-            <>
-              <i className="fas fa-search"></i>
-              Analyze Image
-            </>
+            <div className="preview-area">
+              <img src={previewUrl} alt="Preview" />
+              <button className="remove-btn" onClick={handleRemoveImage}>
+                <i className="fas fa-times"></i>
+              </button>
+            </div>
           )}
-        </button>
 
-        {result && (
-          <div className="result-area">
+          <button
+            className="predict-btn"
+            onClick={handlePredict}
+            disabled={!selectedFile || isLoading}
+          >
+            {isLoading ? (
+              <>
+                <div className="spinner"></div>
+                Analyzing...
+              </>
+            ) : (
+              <>
+                <i className="fas fa-search"></i>
+                Analyze Image
+              </>
+            )}
+          </button>
+        </div>
+
+        <div className="results-section">
+          {result ? (
             <div className="result-card">
-              <h3>Analysis Results</h3>
+              <div className="result-header">
+                <h3>
+                  <i className="fas fa-chart-line"></i>
+                  Analysis Results
+                </h3>
+              </div>
               <div className="result-content">
                 <div className="prediction">
-                  <span className="label">Prediction:</span>
+                  <div className="result-label">
+                    <i className="fas fa-diagnoses"></i>
+                    <span>Prediction</span>
+                  </div>
                   <span
                     className={`value ${result.prediction === 'Cardiomegaly' ? 'positive' : 'negative'}`}
                   >
@@ -130,15 +142,32 @@ const SingleImagePrediction: React.FC = () => {
                   </span>
                 </div>
                 <div className="confidence">
-                  <span className="label">Confidence:</span>
+                  <div className="result-label">
+                    <i className="fas fa-percentage"></i>
+                    <span>Confidence</span>
+                  </div>
                   <span className="value">
                     {(result.confidence * 100).toFixed(2)}%
                   </span>
                 </div>
+                <div className="confidence-bar">
+                  <div 
+                    className="confidence-fill" 
+                    style={{ width: `${result.confidence * 100}%` }}
+                  ></div>
+                </div>
               </div>
             </div>
-          </div>
-        )}
+          ) : (
+            <div className="result-placeholder">
+              <div className="placeholder-content">
+                <i className="fas fa-microscope"></i>
+                <h3>Analysis Results</h3>
+                <p>Upload and analyze an image to see results here</p>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
